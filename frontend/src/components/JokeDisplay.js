@@ -5,6 +5,7 @@ function JokeDisplay() {
   const [jokes, setJokes] = useState([]); // all jokes
   const [currentIndex, setCurrentIndex] = useState(0); // index of current joke
   const [loading, setLoading] = useState(true);
+  const [isAnswerVisible, setIsAnswerVisible] = useState(false);
 
   const fetchJokes = async () => {
     try { 
@@ -57,17 +58,34 @@ function JokeDisplay() {
       {/* nav buttons + text */}
       <div className={styles.navigationButtons}>
         <button
-          onClick={() => setCurrentIndex((prevIndex) => (prevIndex - 1 + jokes.length) % jokes.length)}
+          onClick={() => {
+            setCurrentIndex((prevIndex) => (prevIndex - 1 + jokes.length) % jokes.length);
+            setIsAnswerVisible(false);
+          }}
           className={styles.navButton}
         >
           ←
         </button>
         <div className={styles.jokeText}>
           <h2 className={styles.question}>{currentJoke.question}</h2>
-          <p className={styles.answer}>{currentJoke.answer}</p>
+
+          {/* answer is hide while isAnswerVisible is false */}
+          {isAnswerVisible ? (
+            <p className={styles.answer}>{currentJoke.answer}</p>
+            ) : (
+            <button 
+              className={styles.checkAnswerButton}
+              onClick={() => setIsAnswerVisible(true)} 
+              >
+              Check the answer
+            </button>
+          )}  
         </div>
         <button
-          onClick={() => setCurrentIndex((prevIndex) => (prevIndex + 1) % jokes.length)}
+          onClick={() => {
+            setCurrentIndex((prevIndex) => (prevIndex + 1) % jokes.length);
+            setIsAnswerVisible(false); // hide answer when moving to next joke
+          }}
           className={styles.navButton}
         >
           →
